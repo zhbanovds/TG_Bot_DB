@@ -1,11 +1,17 @@
-# db_config.py
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import os
 
-# URL подключения к базе данных (для примера используется SQLite)
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///my_database.db")
+# URL подключения к базе данных
+DATABASE_URL = "postgresql+psycopg2://postgres:26Qr45TO@localhost:5432/tg_bot_db"
+
+# Проверка соединения
+try:
+    engine = create_engine(DATABASE_URL)
+    connection = engine.connect()
+    print("Соединение с базой данных успешно!")
+    connection.close()
+except Exception as e:
+    print(f"Ошибка подключения: {e}")
 
 # Создаем объект движка для подключения к базе данных
 engine = create_engine(DATABASE_URL, echo=True)
@@ -25,3 +31,12 @@ def create_db_connection():
     except Exception as e:
         print(f"Ошибка подключения к базе данных: {e}")
         return None
+
+if __name__ == "__main__":
+    # Пример тестирования подключения
+    session = create_db_connection()
+    if session:
+        session.close()
+
+
+
