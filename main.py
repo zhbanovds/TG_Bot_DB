@@ -1,17 +1,17 @@
-# main.py
+import asyncio
+from aiogram import Bot, Dispatcher
+from aiogram.fsm.storage.memory import MemoryStorage
+from config import BOT_TOKEN
+from handlers import router  # тот самый router из handlers.py
 
-# Импорт необходимых модулей
-from bot.bot import run_bot
-from database.db_config import create_db_connection
+bot = Bot(token=BOT_TOKEN)
+storage = MemoryStorage()
+dp = Dispatcher(storage=storage)
+dp.include_router(router)
 
-
-def main():
-    # Создаем подключение к базе данных
-    db_connection = create_db_connection()
-
-    # Запуск бота
-    run_bot(db_connection)
-
+async def main():
+    print("Бот запущен...")
+    await dp.start_polling(bot, skip_updates=True)
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
